@@ -16,6 +16,7 @@ function GameOfLife() {
     setWorld(newWorld);
   };
 
+  /* Click handlers */
   const [isMouseDown, setIsMouseDown] = useState(false);
 
   const handleCellHold = (rowIndex, colIndex, ev) => {
@@ -31,7 +32,7 @@ function GameOfLife() {
   };
 
   const handleMouseDown = () => {
-    setIsMouseDown(true);
+    setIsMouseDown(true)
   };
 
   const handleMouseUp = () => {
@@ -47,8 +48,8 @@ function GameOfLife() {
   }
 
   useEffect(() => {
-    const numberRows = 30;
-    const numberCol = 30;
+    const numberRows = 50;
+    const numberCol = 50;
     createWorld(numberRows, numberCol);
   }, []);
 
