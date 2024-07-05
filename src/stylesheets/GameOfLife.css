@@ -9,8 +9,8 @@ table {
 td {
     background-color: rgb(255, 255, 255);
     border:1px solid #ccc7c7;
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     user-select: none;
 }
 
