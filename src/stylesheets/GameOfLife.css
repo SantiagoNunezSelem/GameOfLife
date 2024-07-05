@@ -1,10 +1,19 @@
+body {
+    background-color: rgb(129, 129, 129);
+}
+
 table {
     border-collapse: collapse;
 }
 
 td {
-    color: aliceblue;
-    border:1px solid #a7a7a7;
+    background-color: rgb(255, 255, 255);
+    border:1px solid #ccc7c7;
     width: 20px;
     height: 20px;
+    user-select: none;
+}
+
+#board-container td.alive {
+    background-color: rgb(71, 71, 71);
 }
