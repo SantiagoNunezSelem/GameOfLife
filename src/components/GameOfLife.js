@@ -1,66 +1,88 @@
-import React, { useState, useEffect } from "react";
-import "../stylesheets/GameOfLife.css";
+import React, { useState, useEffect } from "react"
+import "../stylesheets/GameOfLife.css"
 
 function GameOfLife() {
-  const [world, setWorld] = useState([]);
+  const [numberRows, setNumberRows] = useState(50)
+  const [numberCol, setNumberCol] = useState(50)
+  const [world, setWorld] = useState([])
+  const [generation, setGeneration] = useState(0)
+  const [livingCells, setLivingCells] = useState(0)
+
+  const [restart,setRestart] = useState(false)
+
+  useEffect(() => {
+    createWorld(numberRows, numberCol)
+
+    setGameRunning(false)
+    setGeneration(0)
+    setLivingCells(0)
+
+    if(restart)
+      setRestart(false)
+
+  }, [,restart])
 
   const createWorld = (numberRows, numberCol) => {
-    const newWorld = [];
+    const newWorld = []
     for (let row = 0; row < numberRows; row++) {
-      const newRow = [];
+      const newRow = []
       for (let col = 0; col < numberCol; col++) {
-        newRow.push({ id: `${row}-${col}`, alive: false});
+        newRow.push({ id: `${row}-${col}`, alive: false})
       }
-      newWorld.push(newRow);
+      newWorld.push(newRow)
     }
-    setWorld(newWorld);
+    setWorld(newWorld)
   };
 
   const [gameRunning,setGameRunning] = useState(false)
 
   /* game running */
   useEffect(() => {
-    let intervalId;
+    let intervalId
 
     if (gameRunning) {
       intervalId = setInterval(() => {
-        nextTurn()
-      }, 1000);
+        nextGeneration()
+      }, 100)
     }
 
-    // Limpiar el intervalo cuando `gameRunning` cambie o el componente se desmonte
     return () => {
-      clearInterval(intervalId);
-    };
-  }, [gameRunning]);
+      clearInterval(intervalId)
+    }
+  }, [gameRunning,world])
 
-  const nextTurn = () => {
+  const nextGeneration = () => {
     /*
     1.	Si un cuadrado de la grilla está rodeado por tres células vecinas entonces se crea vida, agregándose una célula en ese sitio.
     2.	Si una célula tiene menos de 2 células vecinas, muere por aislamiento y la casilla de la grilla correspondiente queda vacía, y si tiene más de 3 células vecinas, muere por sofocación y también se libera el cuadrado de la grilla que le correspondía.
     3.	Una célula que tiene exactamente dos o tres vecinas sobrevive una instancia más en el juego.
     */
-    const newWorld = [...world]
-    
-    world.map((row,index1) => {
-      row.map((col,index2) => {
-        if(world[index1][index2].alive == false){
-          const numberLivingNeighborCells = numberOfLivingNeighborCells(index1,index2)
+    let livingCells = 0 
 
-          if(numberLivingNeighborCells == 3)
-            newWorld[index1][index2].alive = true
+    const newWorld = world.map((row,index1) => {
+      return row.map((cell,index2) => {
+        const numberLivingNeighborCells = numberOfLivingNeighborCells(index1,index2)
+        if(cell.alive === false){
+          if(numberLivingNeighborCells === 3){
+            livingCells++
+            return {...cell, alive: true}
+          }
+          else
+            return {...cell, alive: false}
         }
         else{
-          const numberLivingNeighborCells = numberOfLivingNeighborCells(index1,index2)
-          console.log(numberLivingNeighborCells)
           if(numberLivingNeighborCells < 2 || numberLivingNeighborCells > 3)
-            newWorld[index1][index2].alive = false
-          else
-            newWorld[index1][index2].alive = true
+            return {...cell, alive: false}
+          else{
+            livingCells++
+            return {...cell, alive: true}
+          }
         }
       })
     })
-    
+
+    setGeneration((prevGeneration) => {return prevGeneration+1})
+    setLivingCells(livingCells)
     setWorld(newWorld)
   }
 
@@ -79,34 +101,34 @@ function GameOfLife() {
   }
 
   const validCoordinates = (x,y) => {
-    if(x<0 || x>49 || y<0 || y>49)
+    if(x < 0 || x > numberRows-1 || y < 0 || y > numberCol-1)
       return false
     else
       return true
   }
 
   /* Click handlers */
-  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isMouseDown, setIsMouseDown] = useState(false)
 
   const handleCellHold = (rowIndex, colIndex, ev) => {
     
     if(isMouseDown){
       setWorld((prevWorld) => {
-        const newWorld = [...prevWorld];
-        newWorld[rowIndex][colIndex].alive = true;
+        const newWorld = [...prevWorld]
+        newWorld[rowIndex][colIndex].alive = true
 
-        return newWorld;
-      });
+        return newWorld
+      })
     }
-  };
+  }
 
   const handleMouseDown = () => {
     setIsMouseDown(true)
-  };
+  }
 
   const handleMouseUp = () => {
-    setIsMouseDown(false);
-  };
+    setIsMouseDown(false)
+  }
 
   const handleCellClick = (rowIndex, colIndex) => {
     const newWorld = [...world]
@@ -116,16 +138,18 @@ function GameOfLife() {
     setWorld(newWorld)
   }
 
-  useEffect(() => {
-    const numberRows = 50;
-    const numberCol = 50;
-    createWorld(numberRows, numberCol);
-  }, []);
-
   return (
-    <div className="app">
-      <button onClick={() => setGameRunning(true)}>start</button>
-      <button onClick={() => setGameRunning(false)}>finish</button>
+    <div className="game-of-life-container">
+      <div id="info-container">
+        <button onClick={() => setGameRunning(true)}>Start</button>
+        <button onClick={() => setGameRunning(false)}>Stop</button>
+        <p className="text-info">Generación: {generation}</p>
+        <p className="text-info">Celulas Vivas: {livingCells}</p>
+        <div>
+          <button onClick={() => setRestart(true)}>Restart</button>
+        </div>
+      </div>
+      
       <div id="board-container">
         <table onMouseLeave={() => setIsMouseDown(false)}>
           <tbody>
