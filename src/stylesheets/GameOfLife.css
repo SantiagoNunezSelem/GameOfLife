@@ -2,6 +2,19 @@ body {
     background-color: rgb(129, 129, 129);
 }
 
+#info-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    gap:10px;
+    margin: 10px;
+}
+
+.text-info {
+    color:rgb(245, 245, 245);
+}
+
 table {
     border-collapse: collapse;
 }
