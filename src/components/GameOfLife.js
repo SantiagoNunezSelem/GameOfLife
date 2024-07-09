@@ -11,6 +11,8 @@ function GameOfLife() {
   const [restart,setRestart] = useState(false)
 
   useEffect(() => {
+    mobileBoard()
+
     createWorld(numberRows, numberCol)
 
     setGameRunning(false)
@@ -137,6 +139,17 @@ function GameOfLife() {
 
     setWorld(newWorld)
   }
+
+  /* mobile  */
+  const mobileBoard = () => {
+    if(window.innerWidth <= 768){
+      //Is mobile
+      setNumberRows(30)
+      setNumberCol(30)
+    }
+    
+  }
+
 
   return (
     <div className="game-of-life-container">
