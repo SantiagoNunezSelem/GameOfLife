@@ -46,6 +46,10 @@ function GameOfLife() {
       intervalId = setInterval(() => {
         nextGeneration()
       }, 100)
+
+      if(livingCells == 0 && generation > 0){
+        setGameRunning(false)
+      }
     }
 
     return () => {
@@ -113,14 +117,16 @@ function GameOfLife() {
   const [isMouseDown, setIsMouseDown] = useState(false)
 
   const handleCellHold = (rowIndex, colIndex, ev) => {
-    
-    if(isMouseDown){
-      setWorld((prevWorld) => {
-        const newWorld = [...prevWorld]
-        newWorld[rowIndex][colIndex].alive = true
-
-        return newWorld
-      })
+    const stateInsertCells = allowInsertCells()
+    if(stateInsertCells === 1){
+      if(isMouseDown){
+        setWorld((prevWorld) => {
+          const newWorld = [...prevWorld]
+          newWorld[rowIndex][colIndex].alive = true
+  
+          return newWorld
+        })
+      }
     }
   }
 
@@ -133,11 +139,33 @@ function GameOfLife() {
   }
 
   const handleCellClick = (rowIndex, colIndex) => {
-    const newWorld = [...world]
+    const stateInsertCells = allowInsertCells()
+    if(stateInsertCells === 1){
+      const newWorld = [...world]
 
-    newWorld[rowIndex][colIndex].alive = !newWorld[rowIndex][colIndex].alive
+      newWorld[rowIndex][colIndex].alive = !newWorld[rowIndex][colIndex].alive
 
-    setWorld(newWorld)
+      setWorld(newWorld)
+    }
+    else{
+      if(stateInsertCells === -1){
+        setRestart(true)
+      }
+    }
+  }
+
+  const allowInsertCells = () => {
+    //0=game runing
+    //1=game initial state (generation 0)
+    //-1=game final state
+    if(!gameRunning){
+      if(generation == 0){
+        return 1
+      }
+      return -1
+    }
+
+    return 0
   }
 
   /* mobile  */
@@ -172,7 +200,7 @@ function GameOfLife() {
                   <td
                     key={cell.id}
                     id={`cell-${rowIndex}-${colIndex}`}
-                    className={cell.alive ? "alive" : "dead"}
+                    className={`${cell.alive ? "alive" : "dead"} ${generation > 0 ? "running" : ""}`}
                     onClick={() => handleCellClick(rowIndex, colIndex)}
                     onMouseDown={() => handleMouseDown()}
                     onMouseUp={() => handleMouseUp()}
