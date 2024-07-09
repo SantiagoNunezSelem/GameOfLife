@@ -26,6 +26,7 @@ body {
 
 table {
     border-collapse: collapse;
+    
 }
 
 td {
@@ -34,6 +35,10 @@ td {
     width: 10px;
     height: 10px;
     user-select: none;
+}
+
+td.running {
+    background-color: rgba(244, 250, 255, 0.76);
 }
 
 #board-container td.alive {
