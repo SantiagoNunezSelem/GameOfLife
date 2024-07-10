@@ -11,8 +11,6 @@ function GameOfLife() {
   const [restart,setRestart] = useState(false)
 
   useEffect(() => {
-    mobileBoard()
-
     createWorld(numberRows, numberCol)
 
     setGameRunning(false)
@@ -47,7 +45,7 @@ function GameOfLife() {
         nextGeneration()
       }, 100)
 
-      if(livingCells == 0 && generation > 0){
+      if(livingCells === 0 && generation > 0){
         setGameRunning(false)
       }
     }
@@ -99,7 +97,7 @@ function GameOfLife() {
       for(let col=y-1; col<=y+1; col++){
         if(row === x && col === y) continue;
 
-        if(validCoordinates(row,col) && world[row][col].alive == true)
+        if(validCoordinates(row,col) && world[row][col].alive === true)
           numberLivingNeighborCells++
       }
     }
@@ -159,7 +157,7 @@ function GameOfLife() {
     //1=game initial state (generation 0)
     //-1=game final state
     if(!gameRunning){
-      if(generation == 0){
+      if(generation === 0){
         return 1
       }
       return -1
@@ -168,14 +166,18 @@ function GameOfLife() {
     return 0
   }
 
-  /* mobile  */
-  const mobileBoard = () => {
-    if(window.innerWidth <= 768){
-      //Is mobile
+  const changeBoardSize = () => {
+    if(numberRows === 50 && numberCol === 50){
       setNumberRows(30)
       setNumberCol(30)
     }
-    
+    else{
+      if(numberRows === 30 && numberCol === 30){
+        setNumberRows(50)
+        setNumberCol(50)
+      }
+    }
+    setRestart(true)
   }
 
 
@@ -188,6 +190,7 @@ function GameOfLife() {
         <p className="text-info">Celulas Vivas: {livingCells}</p>
         <div>
           <button onClick={() => setRestart(true)}>Restart</button>
+          <button onClick={() => changeBoardSize()}>Change Board Size</button>
         </div>
       </div>
       
