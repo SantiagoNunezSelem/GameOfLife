@@ -2,6 +2,11 @@ body {
     background-color: rgb(129, 129, 129);
 }
 
+#board-container {
+    display: flex;
+    justify-content: center;
+}
+
 #info-container {
     display: flex;
     align-items: center;
@@ -16,6 +21,11 @@ body {
     height: auto;
 }
 
+#info-container div {
+    display: flex;
+    gap:10px;
+}
+
 .text-info {
     color:rgb(245, 245, 245);
 }
@@ -26,7 +36,6 @@ body {
 
 table {
     border-collapse: collapse;
-    
 }
 
 td {
