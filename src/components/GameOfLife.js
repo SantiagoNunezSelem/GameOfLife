@@ -180,7 +180,6 @@ function GameOfLife() {
     setRestart(true)
   }
 
-
   return (
     <div className="game-of-life-container">
       <div id="info-container">
@@ -195,7 +194,9 @@ function GameOfLife() {
       </div>
       
       <div id="board-container">
-        <table onMouseLeave={() => setIsMouseDown(false)}>
+        <table onMouseLeave={() => setIsMouseDown(false)}
+                className={`${numberRows == 50 ? "big" : ""} 
+                            ${numberRows == 30 ? "small" : ""}`}>
           <tbody>
             {world.map((row, rowIndex) => (
               <tr key={rowIndex}>
@@ -203,7 +204,8 @@ function GameOfLife() {
                   <td
                     key={cell.id}
                     id={`cell-${rowIndex}-${colIndex}`}
-                    className={`${cell.alive ? "alive" : "dead"} ${generation > 0 ? "running" : ""}`}
+                    className={`${cell.alive ? "alive" : "dead"} 
+                                ${generation > 0 ? "running" : ""}`}
                     onClick={() => handleCellClick(rowIndex, colIndex)}
                     onMouseDown={() => handleMouseDown()}
                     onMouseUp={() => handleMouseUp()}
