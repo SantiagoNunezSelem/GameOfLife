@@ -195,8 +195,8 @@ function GameOfLife() {
       
       <div id="board-container">
         <table onMouseLeave={() => setIsMouseDown(false)}
-                className={`${numberRows == 50 ? "big" : ""} 
-                            ${numberRows == 30 ? "small" : ""}`}>
+                className={`${numberRows === 50 ? "big" : ""} 
+                            ${numberRows === 30 ? "small" : ""}`}>
           <tbody>
             {world.map((row, rowIndex) => (
               <tr key={rowIndex}>
